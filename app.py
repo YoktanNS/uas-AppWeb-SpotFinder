@@ -7,7 +7,7 @@ from folium.plugins import MarkerCluster
 
 # --- Konfigurasi Halaman ---
 st.set_page_config(
-    page_title="JakWifi-View - Dasbor WiFi Publik Jakarta",
+    page_title="SpotFinder: Dashboard WiFi Gratis Indonesia",
     page_icon="📶",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -47,9 +47,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# =====================================================
-#              FUNGSI LOAD DATA (FIX Koordinat)
-# =====================================================
+# ==================
+#  FUNGSI LOAD DATA 
 @st.cache_data
 def load_data(file_path='data_jakarta.csv'):
     try:
@@ -75,7 +74,7 @@ def load_data(file_path='data_jakarta.csv'):
 
         # -------------------------------
         # AUTO FIX LAT / LONG TERTUKAR
-        # -------------------------------
+
         wrong_lat = df[(df['lat'] > 10) | (df['lat'] < -10)]
 
         if len(wrong_lat) > 0:
@@ -91,12 +90,11 @@ def load_data(file_path='data_jakarta.csv'):
         return None
 
 
-# =====================================================
-#                    FUNGSI UTAMA
-# =====================================================
+# ==============
+# FUNGSI UTAMA
 def main():
-    st.markdown('<h1 class="main-header">📶 JakWifi-View: Dasbor WiFi Publik Jakarta</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-header">Temukan dan analisis hotspot JakWifi di seluruh DKI Jakarta.</p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header"> SpotFinder: Dashboard WiFi Gratis Indonesia</h1>', unsafe_allow_html=True)
+    st.markdown('<p class="sub-header">Selamat datang di SpotFinder. Temukan WiFi Gratis di Sekitar anda (Saat ini hanya bisa di DKI Jakarta).</p>', unsafe_allow_html=True)
 
     df_main = load_data('data_jakarta.csv')
 
@@ -104,7 +102,7 @@ def main():
         return
 
     # --- Filter Sidebar ---
-    st.sidebar.header("🔍 Filter Pencarian")
+    st.sidebar.header(" Filter Pencarian")
 
     df_filtered = df_main.copy()
 
@@ -131,20 +129,18 @@ def main():
     top_sub_district = df_filtered['sub_district'].mode()[0] if total_hotspot else "N/A"
     top_district = df_filtered['district'].mode()[0] if total_hotspot else "N/A"
 
-    col1.metric("📡 Total Hotspot", total_hotspot)
-    col2.metric("📍 Kecamatan Teratas", top_district)
-    col3.metric("🏘️ Kelurahan Teratas", top_sub_district)
+    col1.metric(" Total Hotspot", total_hotspot)
+    col2.metric(" Kecamatan Teratas", top_district)
+    col3.metric(" Kelurahan Teratas", top_sub_district)
 
     st.markdown("---")
 
     # ===============================
-    #          TAB MENU
-    # ===============================
-    tab1, tab2, tab3 = st.tabs(["🗺️ Peta Lokasi", "📊 Analisis Data", "📋 Data Mentah"])
+    # TAB MENU
+    tab1, tab2, tab3 = st.tabs([" Peta Lokasi", " Analisis Data", " Data Mentah"])
 
     # =====================================================
-    #               TAB 1 — PETA FOLIUM
-    # =====================================================
+    # TAB 1 — PETA FOLIUM
     with tab1:
         st.markdown("## 🗺️ Peta Lokasi Hotspot")
 
@@ -181,8 +177,7 @@ def main():
             st.info(f"Menampilkan {total_hotspot} titik.")
 
     # =====================================================
-    #               TAB 2 — PLOTLY CHART
-    # =====================================================
+    # TAB 2 — PLOTLY CHART
     with tab2:
         st.markdown("## 📊 Analisis Data")
         if not df_filtered.empty:
@@ -211,14 +206,13 @@ def main():
                 st.plotly_chart(figB, use_container_width=True)
 
     # =====================================================
-    #               TAB 3 — DATAFRAME
-    # =====================================================
+    # TAB 3 — DATAFRAME
     with tab3:
         st.markdown("## 📋 Data Mentah")
         st.dataframe(df_filtered, use_container_width=True)
 
         st.download_button(
-            "📥 Download CSV",
+            " Download CSV",
             df_filtered.to_csv(index=False).encode('utf-8'),
             "jakwifi_filtered.csv",
             "text/csv"
