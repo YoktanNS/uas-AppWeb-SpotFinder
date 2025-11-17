@@ -129,7 +129,7 @@ def main():
     top_sub_district = df_filtered['sub_district'].mode()[0] if total_hotspot else "N/A"
     top_district = df_filtered['district'].mode()[0] if total_hotspot else "N/A"
 
-    col1.metric(" Total Hotspot", total_hotspot)
+    col1.metric(" Total Wifi Gratis", total_hotspot)
     col2.metric(" Kecamatan Teratas", top_district)
     col3.metric(" Kelurahan Teratas", top_sub_district)
 
@@ -142,7 +142,7 @@ def main():
     # =====================================================
     # TAB 1 — PETA FOLIUM
     with tab1:
-        st.markdown("## 🗺️ Peta Lokasi Hotspot")
+        st.markdown("## 🗺️ Peta Lokasi Wifi")
 
         if df_filtered.empty:
             st.warning("Tidak ada data sesuai filter.")
